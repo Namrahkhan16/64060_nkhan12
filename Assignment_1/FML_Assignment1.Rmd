@@ -1,0 +1,80 @@
+---
+title: "FML_Assignment"
+author: "Namrah"
+date: "2023-09-10"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+
+# This dataset is downloaded from Kaggle
+
+```{r}
+library(openxlsx)
+library(ggplot2)
+
+```
+
+```{r}
+# Read the Excel file
+shipment_dataset <- read.xlsx("C:/Users/Namrah/Desktop/Shipment_data.xlsx")
+
+# To display the first few rows of the dataset
+head(shipment_dataset)
+```
+
+```{r}
+
+# Selecting quantitative variables
+quantitative_vars <- c("Customer_care_calls", "Customer_rating", "Cost_of_the_Product", "Prior_purchases", "Discount_offered", "Weight_in_gms")
+
+# Selecting categorical variables
+categorical_vars <- c("Warehouse_block", "Mode_of_Shipment", "Product_importance", "Gender", "Reached.on.Time_Y.N")
+
+# Printing descriptive statistics for quantitative variables
+quantitative_summary <- summary(shipment_dataset[, quantitative_vars])
+print("Descriptive Statistics for Quantitative Variables:")
+print(quantitative_summary)
+
+# Printing frequency tables for categorical variables
+print("\nDescriptive Statistics for Categorical Variables:")
+for (var in categorical_vars) {
+  cat(paste(var, ":\n"))
+  print(table(shipment_dataset[, var]))
+  cat("\n")
+}
+
+```
+
+```{r}
+
+# Transform the 'Weight_in_gms' variable and create a new variable 'sqrt_Weight_in_gms'
+shipment_dataset$sqrt_Weight_in_gms <- sqrt(shipment_dataset$Weight_in_gms)
+head(shipment_dataset)
+
+```
+
+```{r}
+
+# Creating a histogram for the 'Customer_rating' variable
+ggplot(shipment_dataset, aes(x = Customer_rating)) +
+  geom_histogram(binwidth = 1, fill = "blue", color = "gold") +
+  labs(title = "Histogram of Customer Ratings",
+       x = "Customer Rating",
+       y = "Frequency")
+
+```
+
+
+```{r}
+
+# Creating a scatterplot between 'Prior_purchases' and 'Cost_of_the_Product'
+plot(shipment_dataset$Prior_purchases, shipment_dataset$Cost_of_the_Product,
+     xlab = "Prior Purchases", ylab = "Cost of the Product",
+     main = "Scatterplot of Prior Purchases vs. Cost of the Product",
+     col = "purple", pch = 20)  # Customize colors and point shapes
+
+```
+
+
